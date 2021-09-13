@@ -25,8 +25,11 @@
   "dependencies": {
     "apollo-server-core": "^3.3.0",
     "apollo-server-express": "^3.3.0",
+    "class-validator": "^0.13.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "graphql": "^15.5.3"
+    "graphql": "^15.5.3",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1"
   }
 }

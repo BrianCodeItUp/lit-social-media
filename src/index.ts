@@ -1,7 +1,10 @@
+import 'reflect-metadata'
 import express from 'express'
-import { ApolloServer, gql } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import cors from 'cors'
+import { buildSchema } from 'type-graphql'
+import { userResolver } from './resolvers'
 
 async function main () {
   try {
@@ -14,18 +17,10 @@ async function main () {
     )
 
     const apolloServer = new ApolloServer({
-      typeDefs: gql`
-        type Query {
-          hello: String
-        }
-      `,
-      resolvers: {
-        Query: {
-          hello: () => {
-            return 'hello world'
-          }
-        }
-      },
+      schema: await buildSchema({
+        resolvers: [userResolver],
+        validate: true
+      }),
       plugins: [
         ApolloServerPluginLandingPageGraphQLPlayground()
       ]
