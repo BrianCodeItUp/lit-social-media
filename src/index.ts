@@ -4,7 +4,7 @@ import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import cors from 'cors'
 import { buildSchema } from 'type-graphql'
-import { userResolver } from './resolvers'
+import resolvers from './resolvers'
 
 async function main () {
   try {
@@ -18,7 +18,7 @@ async function main () {
 
     const apolloServer = new ApolloServer({
       schema: await buildSchema({
-        resolvers: [userResolver],
+        resolvers,
         validate: true
       }),
       plugins: [

@@ -1,0 +1,11 @@
+import { Resolver, Query, Mutation } from 'type-graphql'
+
+@Resolver()
+class {{pascalCase name}}Resolver {
+  @Query(() => String)
+  hello () {
+    return 'hello world'
+  }
+}
+
+export default {{pascalCase name}}Resolver
