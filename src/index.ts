@@ -4,7 +4,7 @@ import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import cors from 'cors'
 import { buildSchema } from 'type-graphql'
-import resolvers from './resolvers'
+import { resolvers } from './core'
 
 async function main () {
   try {
