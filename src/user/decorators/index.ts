@@ -1,1 +1,2 @@
-export * from './IsEmailAlreadyExist.deco'
+export * from './IsEmailNotExist.deco'
+export * from './IsEmailExist.deco'

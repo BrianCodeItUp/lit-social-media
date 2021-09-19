@@ -9,7 +9,7 @@ import {
 import { Service } from "typedi";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
-import { RegisterUserInput, UserResponse } from "./dtos";
+import { LoginUserInput, RegisterUserInput, UserResponse } from "./dtos";
 import { validateInput } from "../core/middlewares";
 
 @Service()
@@ -38,7 +38,34 @@ export class UserResolver {
     const user = await this.userService.createUser(registerUserParams);
     return {
       errors: null,
-      user,
+      user
     };
   }
+
+  @UseMiddleware(validateInput(LoginUserInput))
+  @Mutation(() => UserResponse)
+  async loginUser (
+    @Arg("loginUserParams") loginUserParams: LoginUserInput, 
+    @Ctx() context: { error: any }
+  ): Promise<UserResponse> {
+    if (context.error) { 
+      return {
+        errors: context.error,
+        user: null
+      }
+    }
+
+    const [user, error] = await this.userService.loginUser(loginUserParams)
+    if (error) {
+      return {
+        errors: [error],
+        user: null
+      }
+    }
+
+    return {
+      errors: null,
+      user
+    }
+  } 
 }

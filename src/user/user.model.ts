@@ -18,10 +18,12 @@ export class User {
   readonly updatedAt: Date
 
   @Field()
+  readonly token: string  // token get generated on user service
+
+  @Field()
   @prop()
   username: string
 
-  @Field()
   @prop()
   password: string
 

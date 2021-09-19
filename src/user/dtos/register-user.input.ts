@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty } from 'class-validator'
 import { InputType, Field } from 'type-graphql'
-import { IsEmailAlreadyExist } from '../decorators'
+import { IsEmailNotExist } from '../decorators'
 
 @InputType()
 export class RegisterUserInput {
@@ -13,7 +13,7 @@ export class RegisterUserInput {
   @Field()
   password: string
 
-  @IsEmailAlreadyExist({ message: 'User $value already exists. Choose another email.'})
+  @IsEmailNotExist({ message: 'User $value already exists. Choose another email.'})
   @IsEmail()
   @IsNotEmpty()
   @Field()

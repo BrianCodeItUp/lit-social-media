@@ -10,23 +10,26 @@ import { UserRepository } from '../user.repository';
 
 @Service()
 @ValidatorConstraint({ async: true })
-export class IsEmailAlreadyExistConstraint implements ValidatorConstraintInterface {
+export class IsEmailExistConstraint implements ValidatorConstraintInterface {
   constructor(private userRepository: UserRepository) {}
   validate(email: string) {
     return this.userRepository.getUserByEmail(email).then(user => {
-        return !user
+      if (user) {
+        return true
+      }
+      return false
     })
   }
 }
 
-export function IsEmailAlreadyExist(validationOptions?: ValidationOptions) {
+export function IsEmailExist(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: IsEmailAlreadyExistConstraint,
+      validator: IsEmailExistConstraint,
     });
   };
 }

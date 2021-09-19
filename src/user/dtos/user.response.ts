@@ -2,7 +2,7 @@ import { Field, ObjectType } from 'type-graphql'
 import { User } from '../user.model'
 
 @ObjectType()
-class FieldError {
+export class FieldError {
   @Field()
   field: string;
 
