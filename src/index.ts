@@ -4,10 +4,13 @@ import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import cors from 'cors'
 import { buildSchema } from 'type-graphql'
-import { resolvers } from './core'
+import { Container } from 'typedi'
+import { resolvers, initDatabase } from './core'
+import { useContainer } from 'class-validator'
 
 async function main () {
   try {
+    await initDatabase()
     const app = express()
     app.use(
       cors({
@@ -19,19 +22,32 @@ async function main () {
     const apolloServer = new ApolloServer({
       schema: await buildSchema({
         resolvers,
-        validate: true
+        dateScalarMode: 'timestamp',
+        container: () => {
+          // register Container to class-validator
+          useContainer(Container, {
+            // Thess options need to be given due to this issue with typedi
+            // https://github.com/typestack/class-validator/issues/928
+            fallback: true,
+            fallbackOnErrors: true
+          })
+          return Container
+        },
+        validate: false
       }),
       plugins: [
         ApolloServerPluginLandingPageGraphQLPlayground()
-      ]
+      ],
+      context: () => ({ error: null })
     })
     await apolloServer.start()
     apolloServer.applyMiddleware({
       app,
       cors: false
+
     })
-    app.listen(4000, () => {
-      console.log('server started on localhost:4000')
+    app.listen(process.env.PORT, () => {
+      console.log(`server started on localhost:${process.env.PORT}/graphql`)
     })
   } catch (e) {
     console.log(e)

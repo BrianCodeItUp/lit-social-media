@@ -3,7 +3,7 @@ import { ObjectType as GqlType, Field as GqlField } from 'type-graphql'
 
 export class {{pascalCase name}}Schema {
   @prop()
-  username: String;
+  hello: String;
 }
 
 export const {{pascalCase name}}Model = getModelForClass({{pascalCase name}}Schema)

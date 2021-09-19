@@ -1,5 +1,2 @@
-import UserResolver from './user-resolver'
-
-export {
-  UserResolver
-}
+export * from './user.resolver'
+export * from './user.model'
