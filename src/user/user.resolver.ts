@@ -9,17 +9,22 @@ import {
 import { Service } from "typedi";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
-import { LoginUserInput, RegisterUserInput, UserResponse } from "./dtos";
+import { LoginUserInput, RegisterUserInput, UserResponse } from "./objectTypes";
 import { validateInput } from "../core/middlewares";
+import { MyContext } from "../types";
 
 @Service()
 @Resolver()
 export class UserResolver {
   constructor(private userService: UserService) {}
-  @Query(() => User)
-  async getUser(@Arg("email") email: string): Promise<User> {
-    const user = this.userService.getUser(email);
-    return user;
+  @Query(() => UserResponse)
+  async getUser(@Arg("email") email: string): Promise<typeof UserResponse> {
+    const [user, error] = await this.userService.getUser(email);
+    if (error) {
+      return error
+    }
+
+    return user as User;
   }
 
   @UseMiddleware(validateInput(RegisterUserInput))
@@ -27,45 +32,30 @@ export class UserResolver {
   async registerUser(
     @Arg("registerUserParams") registerUserParams: RegisterUserInput,
     @Ctx() context: { error: any }
-  ): Promise<UserResponse> {
+  ): Promise<typeof UserResponse> {
     if (context.error) {
-      return {
-        errors: context.error,
-        user: null,
-      };
+      return context.error
     }
 
     const user = await this.userService.createUser(registerUserParams);
-    return {
-      errors: null,
-      user
-    };
+    return user
   }
 
   @UseMiddleware(validateInput(LoginUserInput))
   @Mutation(() => UserResponse)
   async loginUser (
     @Arg("loginUserParams") loginUserParams: LoginUserInput, 
-    @Ctx() context: { error: any }
-  ): Promise<UserResponse> {
+    @Ctx() context: MyContext
+  ): Promise<typeof UserResponse> {
     if (context.error) { 
-      return {
-        errors: context.error,
-        user: null
-      }
+      return context.error
     }
 
     const [user, error] = await this.userService.loginUser(loginUserParams)
     if (error) {
-      return {
-        errors: [error],
-        user: null
-      }
+      return error
     }
 
-    return {
-      errors: null,
-      user
-    }
+    return user as User
   } 
 }

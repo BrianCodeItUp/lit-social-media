@@ -1,7 +1,7 @@
 import { Service } from 'typedi'
 import bcrypt from 'bcryptjs'
 import { UserModel, User } from './user.model'
-import { RegisterUserInput } from './dtos'
+import { RegisterUserInput } from './objectTypes'
 
 @Service()
 export class UserRepository {

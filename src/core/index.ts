@@ -1,9 +1,12 @@
 import { NonEmptyArray } from 'type-graphql'
 import { UserResolver } from '../user'
-
-export const resolvers: NonEmptyArray<Function> = [
-  UserResolver
-]
+import { PostResolver } from '../post'
 
 export * from './mongoose'
 export * from './middlewares'
+export * from './objectTypes'
+
+export const resolvers: NonEmptyArray<Function> = [
+  PostResolver,
+  UserResolver
+]

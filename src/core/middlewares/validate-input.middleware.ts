@@ -14,7 +14,9 @@ export function validateInput (Schema: ClassType): MiddlewareFn<MyContext> {
         field: error.property,
         messages: Object.values(error.constraints as { [type: string]: string; })
       }))
-      context.error = formattedErrors
+      context.error = {
+        errors: formattedErrors
+      }
     }
 
     return next()

@@ -1,9 +1,9 @@
 import { prop, getModelForClass } from '@typegoose/typegoose'
-import { ObjectType as GqlType, Field as GqlField } from 'type-graphql'
+import { ObjectType , Field } from 'type-graphql'
 
-export class {{pascalCase name}}Schema {
+export class {{pascalCase name}} {
   @prop()
   hello: String;
 }
 
-export const {{pascalCase name}}Model = getModelForClass({{pascalCase name}}Schema)
+export const {{pascalCase name}}Model = getModelForClass({{pascalCase name}})

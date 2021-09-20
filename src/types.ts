@@ -1,10 +1,9 @@
+import { Request } from "express";
+import { ArgumentErrors } from './core'
 
-
-interface Error {
-  field: string;
-  messages: string[];
-}
 
 export interface MyContext {
-  error: Error[] | null
+  error: ArgumentErrors | null;
+  req: Request;
+  user?: any
 }

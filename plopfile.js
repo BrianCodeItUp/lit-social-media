@@ -24,7 +24,7 @@ const config = (
     actions: [
       {
         type: 'add',
-        path: 'src/{{name}}/{{name}}-resolver.ts',
+        path: 'src/{{name}}/{{name}}.resolver.ts',
         templateFile: 'templates/module/resolver.hbs'
       },
       {
@@ -66,7 +66,7 @@ const config = (
     actions: [
       {
         type: 'add',
-        path: 'src/{{moduleName}}/{{name}}-model.ts',
+        path: 'src/{{moduleName}}/{{name}}.model.ts',
         templateFile: 'templates/module/model.hbs'
       },
       {

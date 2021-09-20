@@ -38,7 +38,7 @@ async function main () {
       plugins: [
         ApolloServerPluginLandingPageGraphQLPlayground()
       ],
-      context: () => ({ error: null })
+      context: ({ req }) => ({ error: null, req })
     })
     await apolloServer.start()
     apolloServer.applyMiddleware({

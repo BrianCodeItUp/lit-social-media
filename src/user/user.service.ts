@@ -1,8 +1,7 @@
 import { Service } from 'typedi'
-import { UserInputError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import { UserRepository } from './user.repository'
-import { FieldError, LoginUserInput, RegisterUserInput } from './dtos'
+import {  LoginUserInput, RegisterUserInput, AuthError } from './objectTypes'
 import { User } from './user.model'
 import bcrypt from 'bcryptjs'
 
@@ -25,28 +24,31 @@ export class UserService {
     return newUser
   }
 
-  async getUser (email: string): Promise<User> {
+  async getUser (email: string): Promise<[User, null] | [null, AuthError]> {
     const user = await this.userRepo.getUserByEmail(email)
     if (!user) {
-      throw new UserInputError('User not found')
+      const authError = {
+        message: `Can't find user email ${email}`
+      }
+      return [null, authError]
     }
-    return user
+    return [user, null]
   }
 
-  async loginUser (loginUserInput: LoginUserInput) {
+  async loginUser (loginUserInput: LoginUserInput): Promise<[User, null] | [null, AuthError]>  {
     const { email, password } = loginUserInput
     const user = await this.userRepo.getUserByEmail(email) as User
     const match = await bcrypt.compare(password, user!.password)
     
     if (!match) {
-      const error: FieldError = {
-        field: 'password',
-        messages: ['incorrect password']
+      const error = {
+        message: 'user account or password is wrong'
       }
-      return [null, error] as [null, FieldError]
+      return [null, error]
     }
+
     const token = this.generateJWT(user)
     Object.assign(user, { token })
-    return [user, null] as [User, null]
+    return [user, null] 
   }
 }
