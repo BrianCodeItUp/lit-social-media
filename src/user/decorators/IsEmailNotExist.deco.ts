@@ -13,7 +13,7 @@ import { UserRepository } from '../user.repository';
 export class IsEmailNotExistConstraint implements ValidatorConstraintInterface {
   constructor(private userRepository: UserRepository) {}
   validate(email: string) {
-    return this.userRepository.getUserByEmail(email).then(user => {
+    return this.userRepository.getUser({ email }).then(user => {
         return !user
     })
   }

@@ -2,7 +2,7 @@ import { Service } from 'typedi'
 import jwt from 'jsonwebtoken'
 import { UserRepository } from './user.repository'
 import {  LoginUserInput, RegisterUserInput } from './objectTypes'
-import { AuthError } from '../core'
+import { Error } from '../core'
 import { User } from './user.model'
 import bcrypt from 'bcryptjs'
 
@@ -25,20 +25,20 @@ export class UserService {
     return newUser
   }
 
-  async getUser (email: string): Promise<[User, null] | [null, AuthError]> {
-    const user = await this.userRepo.getUserByEmail(email)
+  async getUser (id: string): Promise<[User, null] | [null, Error]> {
+    const user = await this.userRepo.getUser({ _id: id })
     if (!user) {
-      const authError = {
-        message: `Can't find user email ${email}`
+      const error = {
+        message: `Can't find user`
       }
-      return [null, authError]
+      return [null, error]
     }
     return [user, null]
   }
 
-  async loginUser (loginUserInput: LoginUserInput): Promise<[User, null] | [null, AuthError]>  {
+  async loginUser (loginUserInput: LoginUserInput): Promise<[User, null] | [null, Error]>  {
     const { email, password } = loginUserInput
-    const user = await this.userRepo.getUserByEmail(email) as User
+    const user = await this.userRepo.getUser({ email }) as User
     const match = await bcrypt.compare(password, user!.password)
     
     if (!match) {

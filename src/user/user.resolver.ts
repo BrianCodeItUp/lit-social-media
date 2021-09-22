@@ -10,16 +10,23 @@ import { Service } from "typedi";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
 import { LoginUserInput, RegisterUserInput, UserResponse } from "./objectTypes";
-import { validateInput } from "../core/middlewares";
+import { validateInput, authUser } from "../core/middlewares";
 import { MyContext } from "../types";
 
 @Service()
 @Resolver()
 export class UserResolver {
   constructor(private userService: UserService) {}
+  
+  @UseMiddleware(authUser)
   @Query(() => UserResponse)
-  async getUser(@Arg("email") email: string): Promise<typeof UserResponse> {
-    const [user, error] = await this.userService.getUser(email);
+  async me(@Ctx() context: MyContext): Promise<typeof UserResponse> {
+    if (context.error) {
+      return context.error
+    }
+
+    const userId = context.user!.id;
+    const [user, error] = await this.userService.getUser(userId);
     if (error) {
       return error
     }

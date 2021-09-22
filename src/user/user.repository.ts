@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs'
 import { UserModel, User } from './user.model'
 import { RegisterUserInput } from './objectTypes'
 
+
+
 @Service()
 export class UserRepository {
   async creatUser (registerUserParams: RegisterUserInput):Promise<User> {
@@ -18,8 +20,8 @@ export class UserRepository {
     return newUser
   }
 
-  async getUserByEmail (email: string) {
-    const user = await UserModel.findOne({ email })
+  async getUser(query: Partial<User>) {
+    const user = await UserModel.findOne(query)
     return user
   }
 }

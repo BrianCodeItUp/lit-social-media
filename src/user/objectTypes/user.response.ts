@@ -1,21 +1,19 @@
 import { createUnionType } from 'type-graphql'
 import { User } from '../user.model'
-import { ArgumentErrors, AuthError } from '../../core';
+import { ArgumentErrors, Error } from '../../core';
 
 export const UserResponse = createUnionType({
   name: 'UserResponse',
-  types: () => [ArgumentErrors, User, AuthError],
+  types: () => [ArgumentErrors, User, Error],
   resolveType: value => {
     if (Object.keys(value).includes('errors')) {
       return ArgumentErrors
     }
 
-    if ('username' in value) {
-      return User
+    if ('message' in value) {
+      return Error
     }
 
-    if ('message' in value) {
-      return AuthError
-    }
+    return User
   }
 })
