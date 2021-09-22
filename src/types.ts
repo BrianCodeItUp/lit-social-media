@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { ArgumentErrors, AuthError } from './core'
+import { ArgumentErrors, Error } from './core'
 
 export interface UserPayload {
   id: string,
@@ -10,7 +10,7 @@ export interface UserPayload {
 }
 
 export interface MyContext {
-  error: ArgumentErrors | AuthError;
+  error: ArgumentErrors | Error;
   req: Request;
   user?: UserPayload
 }

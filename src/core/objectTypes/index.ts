@@ -1,2 +1,2 @@
 export * from './argument-error.type'
-export * from './auth-error.type'
+export * from './error.type'
