@@ -1,9 +1,9 @@
 import { Request } from "express";
-import { ArgumentErrors } from './core'
+import { ArgumentErrors, AuthError } from './core'
 
 
 export interface MyContext {
-  error: ArgumentErrors | null;
+  error: ArgumentErrors | AuthError;
   req: Request;
   user?: any
 }

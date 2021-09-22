@@ -24,14 +24,14 @@ export class UserResolver {
       return error
     }
 
-    return user as User;
+    return user as User
   }
 
   @UseMiddleware(validateInput(RegisterUserInput))
   @Mutation(() => UserResponse)
   async registerUser(
     @Arg("registerUserParams") registerUserParams: RegisterUserInput,
-    @Ctx() context: { error: any }
+    @Ctx() context: MyContext
   ): Promise<typeof UserResponse> {
     if (context.error) {
       return context.error
@@ -47,7 +47,7 @@ export class UserResolver {
     @Arg("loginUserParams") loginUserParams: LoginUserInput, 
     @Ctx() context: MyContext
   ): Promise<typeof UserResponse> {
-    if (context.error) { 
+    if (context.error) {
       return context.error
     }
 

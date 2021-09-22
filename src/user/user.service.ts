@@ -1,7 +1,8 @@
 import { Service } from 'typedi'
 import jwt from 'jsonwebtoken'
 import { UserRepository } from './user.repository'
-import {  LoginUserInput, RegisterUserInput, AuthError } from './objectTypes'
+import {  LoginUserInput, RegisterUserInput } from './objectTypes'
+import { AuthError } from '../core'
 import { User } from './user.model'
 import bcrypt from 'bcryptjs'
 

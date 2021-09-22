@@ -43,8 +43,7 @@ async function main () {
     await apolloServer.start()
     apolloServer.applyMiddleware({
       app,
-      cors: false
-
+      cors: false,
     })
     app.listen(process.env.PORT, () => {
       console.log(`server started on localhost:${process.env.PORT}/graphql`)

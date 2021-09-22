@@ -1,15 +1,16 @@
-import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose'
+import { prop, getModelForClass, modelOptions, Ref } from '@typegoose/typegoose'
 import { ObjectType, Field } from 'type-graphql'
+import { Post } from '../post'
 
 @ObjectType()
 @modelOptions({
   schemaOptions: {
-    timestamps: true
+    timestamps: true 
   }
 })
 export class User {
   @Field()
-  readonly _id: string;
+  readonly _id: string
 
   @Field()
   readonly createdAt: Date
@@ -21,15 +22,23 @@ export class User {
   readonly token: string  // token get generated on user service
 
   @Field()
-  @prop()
-  username: string
+  @prop({ unique: true})
+  username!: string
 
   @prop()
-  password: string
+  password!: string
 
   @Field()
-  @prop()
-  email: string
+  @prop({ unique: true })
+  email!: string
+
+  @Field(() => [Post])
+  @prop({ 
+    ref: () => 'Post',
+    foreignField: 'owner',
+    localField: '_id' 
+  })
+  posts?: Ref<Post>[]
 }
 
 export const UserModel = getModelForClass(User)
