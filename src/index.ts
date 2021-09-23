@@ -9,48 +9,44 @@ import { resolvers, initDatabase } from './core'
 import { useContainer } from 'class-validator'
 
 async function main () {
-  try {
-    await initDatabase()
-    const app = express()
-    app.use(
-      cors({
-        origin: ['http://localhost:3000'],
-        credentials: true
-      })
-    )
+  await initDatabase()
+  const app = express()
+  app.use(
+    cors({
+      origin: ['http://localhost:3000'],
+      credentials: true
+    })
+  )
 
-    const apolloServer = new ApolloServer({
-      schema: await buildSchema({
-        resolvers,
-        dateScalarMode: 'timestamp',
-        container: () => {
-          // register Container to class-validator
-          useContainer(Container, {
-            // Thess options need to be given due to this issue with typedi
-            // https://github.com/typestack/class-validator/issues/928
-            fallback: true,
-            fallbackOnErrors: true
-          })
-          return Container
-        },
-        validate: false
-      }),
-      plugins: [
-        ApolloServerPluginLandingPageGraphQLPlayground()
-      ],
-      context: ({ req }) => ({ error: null, req })
-    })
-    await apolloServer.start()
-    apolloServer.applyMiddleware({
-      app,
-      cors: false,
-    })
-    app.listen(process.env.PORT, () => {
-      console.log(`server started on localhost:${process.env.PORT}/graphql`)
-    })
-  } catch (e) {
-    console.log(e)
-  }
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers,
+      dateScalarMode: 'timestamp',
+      container: () => {
+        // register Container to class-validator
+        useContainer(Container, {
+          // Thess options need to be given due to this issue with typedi
+          // https://github.com/typestack/class-validator/issues/928
+          fallback: true,
+          fallbackOnErrors: true
+        })
+        return Container
+      },
+      validate: false
+    }),
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground()
+    ],
+    context: ({ req }) => ({ error: null, req })
+  })
+  await apolloServer.start()
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  })
+  app.listen(process.env.PORT, () => {
+    console.log(`server started on localhost:${process.env.PORT}/graphql`)
+  })
 }
 
 main()

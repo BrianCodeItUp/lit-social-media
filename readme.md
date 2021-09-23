@@ -1,6 +1,7 @@
 # A simple Graphql backend for social media
 
 ## Tech
+- typescript
 - express
 - apollo-server
 - type-graphql
