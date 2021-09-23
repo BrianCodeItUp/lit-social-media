@@ -39,7 +39,9 @@ export class PostRepository {
 
   async deletePost(postId: string) {
     try {
-      const post = await PostModel.deleteOne({ id: postId })
+      const post = await PostModel.findById(postId)
+      const deletedPost = await post!.remove()
+      console.log(deletedPost)
       return post
     } catch(e) {
       throw new Error(e)

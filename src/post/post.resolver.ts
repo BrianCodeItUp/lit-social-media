@@ -1,6 +1,5 @@
 import { Resolver, Query, Mutation, Arg, UseMiddleware, Ctx, FieldResolver, Root } from 'type-graphql'
 import { validateInput, authUser } from '../core/middlewares'
-import { DeleteResult } from '../core'
 import { Service } from 'typedi'
 import { CreatePostInput, CreatePostResponse, PostsResponse, PostResponse, DeletePostResponse } from './objectTypes'
 import { PostService } from './post.service'
@@ -75,13 +74,13 @@ export class PostResolver {
       return context.error as Error
     }
     const userId = context.user!.id;
-    const [deleteResult, error] = await this.postService.deletePost(userId, id)
+    const [deletedPost, error] = await this.postService.deletePost(userId, id)
   
     if (error) {
       return error 
     }
 
-    return deleteResult as DeleteResult
+    return deletedPost as Post
   }
 
   @FieldResolver()

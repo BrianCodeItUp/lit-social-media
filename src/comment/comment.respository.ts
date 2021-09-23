@@ -39,8 +39,9 @@ export class CommentRepository {
 
   async deleteComment(id: string) {
     try {
-      const result = await CommentModel.deleteOne({ id })
-      return result
+      const comment = await CommentModel.findById(id);
+      const deletedComment = await comment!.remove()
+      return deletedComment
     } catch (e) {
       throw new Error(e)
     }

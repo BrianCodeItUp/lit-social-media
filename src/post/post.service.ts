@@ -2,7 +2,7 @@ import { Service } from "typedi";
 import { CreatePostInput } from "./objectTypes";
 import { Post } from "./post.model";
 import { PostRepository } from "./post.repository";
-import { Error, DeleteResult } from '../core'
+import { Error } from '../core'
 
 
 @Service()
@@ -29,7 +29,7 @@ export class PostService {
   }
 
   async deletePost(userId: string, postId: string):
-   Promise<[DeleteResult, null] | [null, Error]> {
+   Promise<[Post, null] | [null, Error]> {
     const post = await this.postRepo.getPostById(postId);
     if (!post) {
       const error = {
@@ -44,7 +44,7 @@ export class PostService {
       }
       return [null, error]
     }
-    const deleteResult =  await this.postRepo.deletePost(postId)
-    return [deleteResult, null]
+    const deletedPost = await this.postRepo.deletePost(postId) as Post
+    return [deletedPost, null]
   }
 }

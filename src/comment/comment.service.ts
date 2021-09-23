@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import { CommentRepository } from './comment.respository'
-import { DeleteResult, Error } from '../core'
+import { Error } from '../core'
+import { Comment } from "./comment.model";
 
 
 @Service()
@@ -16,7 +17,7 @@ export class CommentService {
   }
   
   async deleteComment({ commentId, userId }: { commentId: string; userId: string }):
-   Promise<[DeleteResult, null] | [null, Error]>{
+   Promise<[Comment, null] | [null, Error]>{
     const comment = await this.commentRepository.getCommentById(commentId)
 
     if (!comment) {
@@ -32,7 +33,7 @@ export class CommentService {
       return [null, error]
     }
     
-    const deleteResult = await this.commentRepository.deleteComment(commentId)
-    return [deleteResult, null]
+    const deletedComment = await this.commentRepository.deleteComment(commentId)
+    return [deletedComment, null]
   }
 }

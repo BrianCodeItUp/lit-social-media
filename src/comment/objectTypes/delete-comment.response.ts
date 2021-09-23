@@ -1,14 +1,15 @@
 import { createUnionType } from "type-graphql";
-import { Error, DeleteResult } from '../../core'
+import { Error } from '../../core'
+import { Comment } from '../comment.model'
 
 export const DeleteCommentResponse = createUnionType({
   name: 'DeleteCommentResponse',
-  types: () => [DeleteResult, Error] as const,
+  types: () => [Comment, Error] as const,
   resolveType: value => {
     if ("message" in value) {
       return Error 
     }
     
-    return DeleteResult
+    return Comment
   }
 })

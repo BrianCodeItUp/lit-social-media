@@ -1,9 +1,10 @@
-import { Error, DeleteResult } from '../core'
-import { authUser } from '../core/middlewares/auth-user.middleware'
 import { Resolver, Mutation, Arg, Ctx, UseMiddleware } from 'type-graphql'
+import { Error } from '../core'
+import { authUser } from '../core/middlewares/auth-user.middleware'
 import { MyContext } from '../types'
 import { CommentService } from './comment.service'
 import { CreateCommentResponse, DeleteCommentResponse } from './objectTypes'
+import { Comment } from './comment.model'
 import { Service } from 'typedi'
 
 @Service()
@@ -37,12 +38,12 @@ export class CommentResolver {
     }
     
     const userId = context.user!.id
-    const [deleteResult, error] = await this.commentService.deleteComment({ userId, commentId: id })
+    const [deletedComment, error] = await this.commentService.deleteComment({ userId, commentId: id })
 
     if (error) {
       return error as Error
     }
 
-    return deleteResult as DeleteResult
+    return deletedComment as Comment
   }
 }

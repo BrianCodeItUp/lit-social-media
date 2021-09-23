@@ -1,13 +1,17 @@
-import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
+import { prop, getModelForClass, Ref, modelOptions, pre } from '@typegoose/typegoose'
 import { User } from '../user'
 import { ObjectType, Field } from 'type-graphql'
-import { Comment } from '../comment'
+import { Comment, CommentModel } from '../comment'
 
 @ObjectType()
 @modelOptions({
   schemaOptions: {
     timestamps: true 
   }
+})
+@pre('remove', async function (next) {
+  await CommentModel.deleteMany({ post: this!._id })
+  next()
 })
 export class Post {
   @Field()
@@ -21,7 +25,7 @@ export class Post {
 
   @Field()
   @prop()
-  title!: string
+  title: string
 
   @Field()
   @prop({ default: '' })
