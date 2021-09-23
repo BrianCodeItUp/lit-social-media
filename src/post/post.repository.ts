@@ -1,4 +1,3 @@
-import { Error } from 'mongoose'
 import { Service } from 'typedi'
 import { CreatePostInput } from './objectTypes'
 import { PostModel } from './post.model'

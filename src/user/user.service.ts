@@ -25,7 +25,7 @@ export class UserService {
     return newUser
   }
 
-  async getUser (id: string): Promise<[User, null] | [null, Error]> {
+  async getUser (id: string) {
     const user = await this.userRepo.getUser({ _id: id })
     if (!user) {
       const error = {

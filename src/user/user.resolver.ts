@@ -5,6 +5,8 @@ import {
   Arg,
   UseMiddleware,
   Ctx,
+  FieldResolver,
+  Root
 } from "type-graphql";
 import { Service } from "typedi";
 import { User } from "./user.model";
@@ -12,11 +14,17 @@ import { UserService } from "./user.service";
 import { LoginUserInput, RegisterUserInput, UserResponse } from "./objectTypes";
 import { validateInput, authUser } from "../core/middlewares";
 import { MyContext } from "../types";
+import { Post } from '../post'
+import { PostService } from "../post";
+import { DocumentType } from "@typegoose/typegoose/lib/types";
+
 
 @Service()
-@Resolver()
+@Resolver(() => User)
 export class UserResolver {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private postService: PostService) {}
   
   @UseMiddleware(authUser)
   @Query(() => UserResponse)
@@ -30,7 +38,6 @@ export class UserResolver {
     if (error) {
       return error
     }
-
     return user as User
   }
 
@@ -65,4 +72,11 @@ export class UserResolver {
 
     return user as User
   } 
+  
+  @FieldResolver(() => [Post])
+  async posts(@Root() root: DocumentType<User>,) {
+    const userId = root.id;
+    const posts = await this.postService.getPosts(userId)
+    return posts
+  }
 }

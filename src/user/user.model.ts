@@ -32,6 +32,7 @@ export class User {
   @prop({ unique: true })
   email!: string
 
+  @Field(() => [Post])
   @prop({ 
     ref: () => 'Post',
     foreignField: 'owner',
