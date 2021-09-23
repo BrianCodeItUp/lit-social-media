@@ -38,7 +38,7 @@ export class User {
     foreignField: 'owner',
     localField: '_id' 
   })
-  posts?: Ref<Post>[]
+  posts: Ref<Post>[]
 }
 
 export const UserModel = getModelForClass(User)

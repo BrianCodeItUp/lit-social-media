@@ -1,6 +1,7 @@
 import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
 import { User } from '../user'
 import { ObjectType, Field } from 'type-graphql'
+import { Comment } from '../comment'
 
 @ObjectType()
 @modelOptions({
@@ -29,6 +30,14 @@ export class Post {
   @Field(() => String)
   @prop({ required: true, ref: () => 'User' })
   public owner: Ref<User>
+
+  @Field(() => [Comment])
+  @prop({ 
+    ref: () => 'Comment',
+    foreignField: 'post',
+    localField: '_id' 
+  })
+  public comments: Ref<Comment>
 }
 
 

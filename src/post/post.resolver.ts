@@ -1,15 +1,20 @@
+import { Resolver, Query, Mutation, Arg, UseMiddleware, Ctx, FieldResolver, Root } from 'type-graphql'
 import { validateInput, authUser } from '../core/middlewares'
-import { Resolver, Query, Mutation, Arg, UseMiddleware, Ctx } from 'type-graphql'
+import { DeleteResult } from '../core'
 import { Service } from 'typedi'
 import { CreatePostInput, CreatePostResponse, PostsResponse, PostResponse, DeletePostResponse } from './objectTypes'
 import { PostService } from './post.service'
 import { MyContext } from 'src/types'
 import { Post } from './post.model'
+import { DocumentType } from '@typegoose/typegoose'
+import { Comment } from '../comment'
+import { CommentService } from '../comment'
+
 
 @Service()
-@Resolver()
+@Resolver(() => Post)
 export class PostResolver {
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService, private commentService: CommentService) {}
 
   @UseMiddleware(authUser)
   @Query(() => PostsResponse, { name: 'posts' })
@@ -70,15 +75,20 @@ export class PostResolver {
       return context.error as Error
     }
     const userId = context.user!.id;
-    const [succeed, error] = await this.postService.deletePost(userId, id)
+    const [deleteResult, error] = await this.postService.deletePost(userId, id)
   
-    if (!succeed) {
-      return error as Error
+    if (error) {
+      return error 
     }
 
-    return {
-      message: `Post ${id} deleted successfully`
-    }
-  }   
+    return deleteResult as DeleteResult
+  }
+
+  @FieldResolver()
+  async comments(@Root() root: DocumentType<Comment>) {
+    const postId = root.id
+    const comments = await this.commentService.getComments(postId)
+    return comments
+  }
 }
 

@@ -2,7 +2,7 @@ import { Service } from "typedi";
 import { CreatePostInput } from "./objectTypes";
 import { Post } from "./post.model";
 import { PostRepository } from "./post.repository";
-import { Error } from '../core'
+import { Error, DeleteResult } from '../core'
 
 
 @Service()
@@ -29,22 +29,22 @@ export class PostService {
   }
 
   async deletePost(userId: string, postId: string):
-   Promise<[boolean, null] | [boolean, Error]> {
+   Promise<[DeleteResult, null] | [null, Error]> {
     const post = await this.postRepo.getPostById(postId);
     if (!post) {
       const error = {
         message: `post with id ${postId} doesn't exist`
       }
-      return [false, error]
+      return [null, error]
     }
 
     if (post.owner!.toString() !== userId) {
       const error = {
         message: `Unauthorized to delete post ${postId}`
       }
-      return [false, error]
+      return [null, error]
     }
-    await this.postRepo.deletePost(postId)
-    return [true, null]
+    const deleteResult =  await this.postRepo.deletePost(postId)
+    return [deleteResult, null]
   }
 }
