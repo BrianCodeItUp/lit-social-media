@@ -15,4 +15,4 @@
 - Create User
 - Login User through JWT
 - User can use CRUD on both their posts and comments
-- Implement error handling through Graphql Union type to make frontend deal with different type errors easier
+- Implement error handling through Graphql Union type to make frontend deal with different type of errors easier
