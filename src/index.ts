@@ -32,11 +32,13 @@ async function main () {
         })
         return Container
       },
+      
       validate: false
     }),
     plugins: [
       ApolloServerPluginLandingPageGraphQLPlayground()
     ],
+    introspection: true,
     context: ({ req }) => ({ error: null, req })
   })
   await apolloServer.start()
