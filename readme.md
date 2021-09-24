@@ -1,5 +1,6 @@
 # A simple Graphql backend for social media
 
+Try to query at [Graphql Playground](https://infinite-wave-69962.herokuapp.com/graphql)
 ## Tech
 - typescript
 - express
