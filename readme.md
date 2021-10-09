@@ -10,7 +10,7 @@ Try to query at [Graphql Playground](https://infinite-wave-69962.herokuapp.com/g
 - typegoose
   - Define Mongoose models using TypeScript classes and can also be used as graphql objectType
 - typedi
-  - For implement dependency injection to inject services and repositories.
+  - Use dependency injection to inject services and repositories.
 
 ## Feature
 - Create User
